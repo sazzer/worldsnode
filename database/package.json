@@ -1,0 +1,11 @@
+{
+  "name": "worlds-database",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Graham Cox <graham@grahamcox.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "db-migrate": "^0.11.3",
+    "db-migrate-pg": "^0.4.0"
+  }
+}
