@@ -4,6 +4,7 @@
   "main": "index.js",
   "author": "Graham Cox <graham@grahamcox.co.uk>",
   "license": "MIT",
+  "private": true,
   "dependencies": {
     "db-migrate": "^0.11.3",
     "db-migrate-pg": "^0.4.0"
