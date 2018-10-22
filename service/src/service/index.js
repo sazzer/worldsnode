@@ -1,0 +1,1 @@
+export { buildService } from './service';
