@@ -6,6 +6,7 @@ import cors from 'cors';
 import errorHandler from 'errorhandler';
 import responseTime from 'response-time';
 import helmet from 'helmet';
+import printRoutes from 'express-routemap';
 import { registerRoutes } from './routes';
 
 /**
@@ -27,5 +28,6 @@ export function buildService() {
     registerRoutes(router);
     app.use(router);
 
+    printRoutes(app);
     return app;
 }

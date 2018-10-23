@@ -1077,6 +1077,12 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+cli-table@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/cli-table/-/cli-table-0.3.1.tgz#f53b05266a8b1a0b934b3d0821e6e2dc5914ae23"
+  dependencies:
+    colors "1.0.3"
+
 cliui@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-4.1.0.tgz#348422dbe82d800b3022eef4f6ac10bf2e4d1b49"
@@ -1109,6 +1115,10 @@ color-convert@^1.9.0:
 color-name@1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
+
+colors@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
 
 combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.7"
@@ -1501,6 +1511,18 @@ expect@^23.6.0:
     jest-matcher-utils "^23.6.0"
     jest-message-util "^23.4.0"
     jest-regex-util "^23.3.0"
+
+express-list-endpoints@^2.0.3:
+  version "2.0.3"
+  resolved "http://registry.npmjs.org/express-list-endpoints/-/express-list-endpoints-2.0.3.tgz#622d0a3806a452f8e812306d6a11c4018340a562"
+
+express-routemap@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/express-routemap/-/express-routemap-1.1.0.tgz#02e3a9c9bf067d81570ca253a214ea57f30980b8"
+  dependencies:
+    chalk "^1.1.3"
+    cli-table "^0.3.1"
+    express-list-endpoints "^2.0.3"
 
 express@^4.16.4:
   version "4.16.4"
