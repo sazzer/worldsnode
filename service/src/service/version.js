@@ -11,6 +11,8 @@ import type {
  * @param {Router} router
  */
 export function registerRoutes(router: Router) {
-    router.route('/')
-        .get((req: $Request, res: $Response) => res.send('Hello'));
+    router.route('/api/version')
+        .get((req: $Request, res: $Response) => res.send({
+            version: '1.0.0'
+        }));
 }
