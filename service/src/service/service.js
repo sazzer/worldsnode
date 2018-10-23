@@ -6,6 +6,7 @@ import cors from 'cors';
 import errorHandler from 'errorhandler';
 import responseTime from 'response-time';
 import helmet from 'helmet';
+import { registerRoutes } from './routes';
 
 /**
  * Build the service that we are going to run
@@ -22,6 +23,9 @@ export function buildService() {
     app.use(errorHandler());
     app.use(helmet());
 
-    app.get('/', (req, res) => res.send('Hello World!'));
+    const router = express.Router();
+    registerRoutes(router);
+    app.use(router);
+
     return app;
 }
