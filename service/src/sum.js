@@ -1,3 +1,5 @@
-export function sum(a, b) {
+// @flow
+
+export function sum(a: number, b: number): number {
     return a + b;
 }

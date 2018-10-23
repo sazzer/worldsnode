@@ -29,6 +29,7 @@ jobs:
           working_directory: ~/repo/service
           command: |
               yarn install
+              yarn lint
               yarn test
       - store_test_results:
           path: ~/repo/service/build/test/reports
