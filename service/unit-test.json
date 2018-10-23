@@ -18,8 +18,8 @@
             "jest-junit",
             {
                 "suiteName": "Unit Tests",
-                "outputDirectory": "build/test/reports",
-                "outputName": "./unit.xml"
+                "outputDirectory": "build/test/reports/unit",
+                "outputName": "./results.xml"
             }
         ]
     ]
