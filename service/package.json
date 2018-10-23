@@ -5,7 +5,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "babel-node src/index.js"
+    "start": "babel-node src/index.js",
+    "test": "jest --notify --config=unit-test.json"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -15,11 +16,16 @@
     "errorhandler": "^1.5.0",
     "express": "^4.16.4",
     "helmet": "^3.14.0",
+    "jest-junit": "^5.2.0",
     "response-time": "^2.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/node": "^7.0.0",
-    "babel-preset-env": "2.0.0-alpha.20"
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-preset-env": "2.0.0-alpha.20",
+    "jest": "^23.6.0",
+    "regenerator-runtime": "^0.12.1"
   }
 }
