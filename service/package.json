@@ -19,6 +19,7 @@
     "express-routemap": "^1.1.0",
     "helmet": "^3.14.0",
     "jest-junit": "^5.2.0",
+    "morgan": "^1.9.1",
     "response-time": "^2.3.2"
   },
   "devDependencies": {

@@ -7,6 +7,7 @@ import errorHandler from 'errorhandler';
 import responseTime from 'response-time';
 import helmet from 'helmet';
 import printRoutes from 'express-routemap';
+import morgan from 'morgan';
 import { registerRoutes } from './routes';
 
 /**
@@ -23,6 +24,7 @@ export function buildService() {
     app.use(cors());
     app.use(errorHandler());
     app.use(helmet());
+    app.use(morgan('dev'));
 
     const router = express.Router();
     registerRoutes(router);
