@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
     database:
         build: ./database
@@ -6,3 +6,7 @@ services:
         build: ./service
     testing:
         build: ./testing
+        volumes:
+            - type: bind
+              source: ./build/reports
+              target: /opt/worlds/build/test/reports

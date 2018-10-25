@@ -32,20 +32,19 @@ jobs:
           key: service-dependencies-{{ checksum "service/package.json" }}
 
   test:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10.12-stretch
+    machine: true
     working_directory: ~/repo
     steps:
       - checkout
-
-      - setup_remote_docker
 
       - run:
           name: "Full Stack Tests"
           working_directory: ~/repo
           command: |
-              docker-compose -f docker-compose.test.yml up --build --exit-code-from=testing
+              docker-compose -p worldstest -f docker-compose.test.yml up --build --exit-code-from=testing
+      - store_test_results:
+          path: ~/repo/build/reports
+
 workflows:
   version: 2
   full_build:
