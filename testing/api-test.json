@@ -1,0 +1,24 @@
+{
+    "clearMocks": true,
+    "resetMocks": true,
+    "roots": [
+        "src"
+    ],
+    "testMatch": [
+        "**/api/**/*.spec.js"
+    ],
+    "testEnvironment": "node",
+    "verbose": true,
+
+    "reporters": [
+        "default",
+        [
+            "jest-junit",
+            {
+                "suiteName": "API Tests",
+                "outputDirectory": "build/test/reports/api",
+                "outputName": "./results.xml"
+            }
+        ]
+    ]
+}

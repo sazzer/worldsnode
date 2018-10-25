@@ -1,0 +1,8 @@
+version: '3'
+services:
+    database:
+        build: ./database
+    service:
+        build: ./service
+    testing:
+        build: ./testing

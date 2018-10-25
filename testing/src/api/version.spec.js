@@ -1,0 +1,5 @@
+// @flow
+
+test('/api/version', () => {
+
+});
