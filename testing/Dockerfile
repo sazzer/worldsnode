@@ -1,5 +1,7 @@
 FROM node:10.12.0-alpine
 
+ENV SERVICE_URI=http://service:3000
+
 # Set up Dockerize
 RUN apk add --no-cache openssl
 
