@@ -19,11 +19,8 @@
     "express": "^4.16.4",
     "express-routemap": "^1.1.0",
     "helmet": "^3.14.0",
-    "jest-junit": "^5.2.0",
     "morgan": "^1.9.1",
-    "response-time": "^2.3.2"
-  },
-  "devDependencies": {
+    "response-time": "^2.3.2",
     "@babel/core": "^7.1.2",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
@@ -32,6 +29,7 @@
     "babel-jest": "^23.6.0",
     "flow-bin": "^0.83.0",
     "jest": "^23.6.0",
+    "jest-junit": "^5.2.0",
     "regenerator-runtime": "^0.12.1"
   }
 }
