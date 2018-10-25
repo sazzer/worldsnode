@@ -10,8 +10,6 @@ jobs:
     steps:
       - checkout
 
-      - setup_remote_docker
-
       - restore_cache:
           name: "Restore Service Cache"
           keys:
@@ -25,7 +23,6 @@ jobs:
               yarn install
               yarn lint
               yarn test
-              ./build.sh
       - store_test_results:
           path: ~/repo/service/build/test/reports
       - save_cache:
@@ -34,8 +31,26 @@ jobs:
             - ~/service/node_modules
           key: service-dependencies-{{ checksum "service/package.json" }}
 
+  test:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:10.12-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
       - run:
           name: "Full Stack Tests"
           working_directory: ~/repo
           command: |
               docker-compose -f docker-compose.test.yml up --build --exit-code-from=testing
+workflows:
+  version: 2
+  full_build:
+      jobs:
+          - build
+          - test:
+              requires:
+                  - build
