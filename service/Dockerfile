@@ -1,5 +1,8 @@
 FROM node:10.12.0-alpine
 
+ENV PORT=3000
+ENV NODE_ENV=production
+
 # Copy application into container
 COPY . /opt/worlds/
 

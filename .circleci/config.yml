@@ -16,7 +16,7 @@ jobs:
           name: "Build Database"
           working_directory: ~/repo/database
           command: |
-            ./build.sh
+              ./build.sh
 
       - restore_cache:
           name: "Restore Service Cache"
@@ -31,6 +31,7 @@ jobs:
               yarn install
               yarn lint
               yarn test
+              ./build.sh
       - store_test_results:
           path: ~/repo/service/build/test/reports
       - save_cache:
