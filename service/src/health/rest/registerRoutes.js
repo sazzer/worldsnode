@@ -3,7 +3,7 @@
 import type {
     Router
 } from 'express';
-import { checkHealth } from './handler';
+import checkHealth from './handler';
 
 /**
  * Register all of the routes with the given router
