@@ -1,1 +1,1 @@
-export { buildService } from './service';
+export { default } from './service';

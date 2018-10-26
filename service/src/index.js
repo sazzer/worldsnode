@@ -1,9 +1,14 @@
 // @flow
 
-import { buildService } from './service';
-import { config } from './config';
+import config from './config';
+import buildService from './service';
+import versionHandler from './service/version';
+import uptimeHealthchecks from './health/system/uptimeHealthcheck';
+import buildHealthchecksHandler from './health/rest';
 
+const service = buildService([
+    versionHandler,
+    buildHealthchecksHandler([uptimeHealthchecks])
+]);
 const port = config.get('http.port');
-
-const app = buildService();
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+service.listen(port, () => console.log(`Service listening on port ${port}`));

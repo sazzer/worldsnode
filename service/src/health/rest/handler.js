@@ -1,11 +1,16 @@
 // @flow
 
-import {HEALTH_PASS, HEALTH_WARN, HEALTH_FAIL, type Health} from '../healthcheck';
-import { uptimeHealthcheck } from '../system/uptimeHealthcheck';
+import {
+    HEALTH_PASS,
+    HEALTH_WARN,
+    HEALTH_FAIL,
+    type Health,
+    type HealthChecker
+} from '../healthcheck';
 
-import type {
-    $Request,
-    $Response
+import {
+    type $Request,
+    type $Response
 } from 'express';
 
 type HealthCheckDetail = {
@@ -55,7 +60,7 @@ export function computeTotalStatus(accum: string, next: string): string {
  * @param results The health results to build from
  * @return the individual components to return
  */
-export function buildComponents(results: Array<Health>) : { [string]: Array<HealthCheckDetail> } {
+export function buildComponents(results: Array<Health>): { [string]: Array<HealthCheckDetail> } {
     const details = {};
     results.forEach(result => {
         const componentName = `${result.component}:${result.measurement}`;
@@ -76,11 +81,13 @@ export function buildComponents(results: Array<Health>) : { [string]: Array<Heal
 
 /**
  * Actually check the health of the system
- * @param req The request
- * @param res The response
+ * @param res The response to write to
+ * @param healthchecks The healthchecks to perform
  */
-export default function checkHealth(req: $Request, res: $Response) {
-    const results = uptimeHealthcheck();
+export default function checkHealth(res: $Response, healthchecks: Array<HealthChecker>) {
+    const results = healthchecks
+        .map(healthcheck => healthcheck())
+        .reduce((a, b) => a.concat(b), []);
 
     const totalStatus = results.map(result => result.status)
         .reduce(computeTotalStatus, HEALTH_PASS);

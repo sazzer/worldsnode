@@ -8,12 +8,18 @@ import responseTime from 'response-time';
 import helmet from 'helmet';
 import printRoutes from 'express-routemap';
 import morgan from 'morgan';
-import { registerRoutes } from './routes';
+
+import type {
+    Router
+} from 'express';
+
+/** Type to represent something that can register routes with the system */
+export type HandlerRegistration = (Router) => void;
 
 /**
  * Build the service that we are going to run
  */
-export function buildService() {
+export default function buildService(handlers: Array<HandlerRegistration>) {
     const app = express();
 
     app.use(responseTime());
@@ -27,7 +33,7 @@ export function buildService() {
     app.use(morgan('dev'));
 
     const router = express.Router();
-    registerRoutes(router);
+    handlers.forEach(handler => handler(router));
     app.use(router);
 
     printRoutes(app);
