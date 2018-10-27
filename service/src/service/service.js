@@ -7,7 +7,7 @@ import errorHandler from 'errorhandler';
 import responseTime from 'response-time';
 import helmet from 'helmet';
 import printRoutes from 'express-routemap';
-import morgan from 'morgan';
+import pino from 'express-pino-logger';
 
 import type {
     Router,
@@ -32,7 +32,7 @@ export default function buildService(handlers: Array<HandlerRegistration>) {
     app.use(cors());
     app.use(errorHandler());
     app.use(helmet());
-    app.use(morgan('dev'));
+    app.use(pino());
 
     const router = new express.Router();
     handlers.forEach((handler) => handler(router));
