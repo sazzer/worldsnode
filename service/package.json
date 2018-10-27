@@ -38,6 +38,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-config-google": "^0.11.0",
-    "eslint-plugin-jest": "^21.26.2"
+    "eslint-plugin-jest": "^21.26.2",
+    "jest-express": "^1.9.0"
   }
 }

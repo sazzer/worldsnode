@@ -14,23 +14,13 @@ import {
 
 type HealthCheckDetail = {
     componentId?: string,
-    componentType?: string,
     observedValue?: any,
     observedUnit?: string,
     status: string,
-    time: string,
-    output?: string
 };
 
 type HealthCheckResponse = {
     status: string,
-    version?: string,
-    releaseId?: string,
-    notes?: Array<string>,
-    output?: string,
-    serviceId?: string,
-    description?: string,
-
     details: { [string]: Array<HealthCheckDetail> }
 };
 
@@ -41,6 +31,13 @@ const HEALTH_STATUSES = {
     [HEALTH_FAIL]: 'fail',
 };
 
+/** Mapping of the health statuses to the HTTP Status Codes to return */
+const HEALTH_STATUS_CODES = {
+    [HEALTH_PASS]: 200,
+    [HEALTH_WARN]: 200,
+    [HEALTH_FAIL]: 500,
+};
+
 /**
  * Helper to compute the total status from an array of individual statuses
  * @param accum The accumulated value so far
@@ -48,10 +45,10 @@ const HEALTH_STATUSES = {
  * @return the newly computed value
  */
 export function computeTotalStatus(accum: string, next: string): string {
-    if (accum === HEALTH_FAIL) {
+    if (accum === HEALTH_FAIL || next === HEALTH_FAIL) {
         return HEALTH_FAIL;
-    } else if (accum === HEALTH_WARN && next !== HEALTH_PASS) {
-        return next;
+    } else if (accum === HEALTH_WARN) {
+        return HEALTH_WARN;
     } else {
         return next;
     }
@@ -71,7 +68,6 @@ export function buildComponents(results: Array<Health>): { [string]: Array<Healt
             status: HEALTH_STATUSES[result.status],
             observedValue: result.value,
             observedUnit: result.unit,
-            time: new Date().toISOString(),
         };
         if (!details[componentName]) {
             details[componentName] = [];
@@ -101,5 +97,6 @@ export default function checkHealth(res: $Response, healthchecks: Array<HealthCh
 
     res
         .type('application/health+json')
+        .status(HEALTH_STATUS_CODES[totalStatus])
         .send(response);
 }
