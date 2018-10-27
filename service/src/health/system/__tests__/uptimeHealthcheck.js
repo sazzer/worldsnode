@@ -1,12 +1,13 @@
 // @flow
 
 import uptimeHealthcheck from '../uptimeHealthcheck';
-import os from 'os';
 
+jest.mock('os', () => {
+    return {
+        uptime: () => 12345,
+    };
+});
 test('Uptime Healthcheck', () => {
-    os.uptime = jest.fn();
-    os.uptime.mockReturnValueOnce(12345);
-
     const result = uptimeHealthcheck();
     expect(result).toHaveLength(1);
     expect(result[0]).toEqual({
