@@ -1,6 +1,16 @@
 {
   "parser": "babel-eslint",
-  "extends": ["eslint:recommended", "google"],
+  "extends": [
+    "eslint:recommended",
+    "google",
+    "plugin:jest/recommended"
+  ],
+  "plugins": [
+    "jest"
+  ],
+  "env": {
+    "jest/globals": true
+  },
   "rules": {
     "indent": ["error", 4],
     "max-len": ["error", 120],
