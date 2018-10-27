@@ -3,7 +3,7 @@
 import type {
     Router,
     $Request,
-    $Response
+    $Response,
 } from 'express';
 
 /**
@@ -13,6 +13,6 @@ import type {
 export default function registerRoutes(router: Router) {
     router.route('/api/version')
         .get((req: $Request, res: $Response) => res.send({
-            version: '1.0.0'
+            version: '1.0.0',
         }));
 }

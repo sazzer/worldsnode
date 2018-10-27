@@ -8,7 +8,8 @@ import buildHealthchecksHandler from './health/rest';
 
 const service = buildService([
     versionHandler,
-    buildHealthchecksHandler([uptimeHealthchecks])
+    buildHealthchecksHandler([uptimeHealthchecks]),
 ]);
 const port = config.get('http.port');
+/* eslint-disable */
 service.listen(port, () => console.log(`Service listening on port ${port}`));

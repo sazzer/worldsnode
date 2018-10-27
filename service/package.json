@@ -6,10 +6,18 @@
   "private": true,
   "scripts": {
     "start": "babel-node src/index.js",
-    "lint": "flow",
+    "flow": "flow",
+    "eslint": "eslint src",
+    "lint": "yarn eslint && yarn flow",
     "test": "jest --notify --config=unit-test.json"
   },
   "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-flow": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
     "connect-rid": "^0.0.1",
@@ -18,18 +26,17 @@
     "errorhandler": "^1.5.0",
     "express": "^4.16.4",
     "express-routemap": "^1.1.0",
-    "helmet": "^3.14.0",
-    "morgan": "^1.9.1",
-    "response-time": "^2.3.2",
-    "@babel/core": "^7.1.2",
-    "@babel/node": "^7.0.0",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-flow": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
     "flow-bin": "^0.83.0",
+    "helmet": "^3.14.0",
     "jest": "^23.6.0",
     "jest-junit": "^5.2.0",
-    "regenerator-runtime": "^0.12.1"
+    "morgan": "^1.9.1",
+    "regenerator-runtime": "^0.12.1",
+    "response-time": "^2.3.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-config-google": "^0.11.0"
   }
 }

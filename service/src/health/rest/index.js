@@ -1,3 +1,3 @@
 // @flow
 
-export { default } from './registerRoutes';
+export {default} from './registerRoutes';

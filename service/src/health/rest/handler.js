@@ -5,12 +5,11 @@ import {
     HEALTH_WARN,
     HEALTH_FAIL,
     type Health,
-    type HealthChecker
+    type HealthChecker,
 } from '../healthcheck';
 
 import {
-    type $Request,
-    type $Response
+    type $Response,
 } from 'express';
 
 type HealthCheckDetail = {
@@ -44,6 +43,9 @@ const HEALTH_STATUSES = {
 
 /**
  * Helper to compute the total status from an array of individual statuses
+ * @param accum The accumulated value so far
+ * @param next The next value to compute from
+ * @return the newly computed value
  */
 export function computeTotalStatus(accum: string, next: string): string {
     if (accum === HEALTH_FAIL) {
@@ -62,21 +64,21 @@ export function computeTotalStatus(accum: string, next: string): string {
  */
 export function buildComponents(results: Array<Health>): { [string]: Array<HealthCheckDetail> } {
     const details = {};
-    results.forEach(result => {
+    results.forEach((result) => {
         const componentName = `${result.component}:${result.measurement}`;
         const value: HealthCheckDetail = {
             componentId: result.subComponent,
             status: HEALTH_STATUSES[result.status],
             observedValue: result.value,
             observedUnit: result.unit,
-            time: new Date().toISOString()
-        }
+            time: new Date().toISOString(),
+        };
         if (!details[componentName]) {
             details[componentName] = [];
         }
         details[componentName].push(value);
     });
-    return details;;
+    return details;
 }
 
 /**
@@ -86,15 +88,15 @@ export function buildComponents(results: Array<Health>): { [string]: Array<Healt
  */
 export default function checkHealth(res: $Response, healthchecks: Array<HealthChecker>) {
     const results = healthchecks
-        .map(healthcheck => healthcheck())
+        .map((healthcheck) => healthcheck())
         .reduce((a, b) => a.concat(b), []);
 
-    const totalStatus = results.map(result => result.status)
+    const totalStatus = results.map((result) => result.status)
         .reduce(computeTotalStatus, HEALTH_PASS);
 
     const response: HealthCheckResponse = {
         status: HEALTH_STATUSES[totalStatus],
-        details: buildComponents(results)
+        details: buildComponents(results),
     };
 
     res

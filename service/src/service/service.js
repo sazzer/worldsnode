@@ -10,7 +10,7 @@ import printRoutes from 'express-routemap';
 import morgan from 'morgan';
 
 import type {
-    Router
+    Router,
 } from 'express';
 
 /** Type to represent something that can register routes with the system */
@@ -18,12 +18,14 @@ export type HandlerRegistration = (Router) => void;
 
 /**
  * Build the service that we are going to run
+ * @param handlers The handlers to use for the service
+ * @return the actual webapp service
  */
 export default function buildService(handlers: Array<HandlerRegistration>) {
     const app = express();
 
     app.use(responseTime());
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
     app.use(compression());
     app.use(connectRid());
@@ -32,8 +34,8 @@ export default function buildService(handlers: Array<HandlerRegistration>) {
     app.use(helmet());
     app.use(morgan('dev'));
 
-    const router = express.Router();
-    handlers.forEach(handler => handler(router));
+    const router = new express.Router();
+    handlers.forEach((handler) => handler(router));
     app.use(router);
 
     printRoutes(app);

@@ -1,3 +1,3 @@
 // @flow
 
-export { default } from './config';
+export {default} from './config';

@@ -6,6 +6,7 @@ import {HEALTH_PASS} from '../healthcheck';
 
 /**
  * Health checker that just returns the system uptime
+ * @return The results of the uptime healthcheck
  */
 export default function uptimeHealthcheck() : Array<Health> {
     return [
@@ -14,7 +15,7 @@ export default function uptimeHealthcheck() : Array<Health> {
             measurement: 'uptime',
             status: HEALTH_PASS,
             value: os.uptime(),
-            unit: 'S'
-        }
+            unit: 'S',
+        },
     ];
 }

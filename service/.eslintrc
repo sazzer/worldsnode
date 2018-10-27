@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "google"],
+  "rules": {
+    "indent": ["error", 4],
+    "max-len": ["error", 120],
+    "valid-jsdoc": ["error", {
+      "requireParamDescription": false,
+      "requireReturnDescription": false,
+      "requireReturn": false,
+      "requireReturnType": false,
+      "requireParamType": false,
+      "prefer": {
+        "returns": "return"
+      }
+    }]
+  }
+}
