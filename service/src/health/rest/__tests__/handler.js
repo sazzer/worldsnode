@@ -1,6 +1,6 @@
 // @flow
 
-import { Response } from 'jest-express/lib/response';
+import {Response} from 'jest-express/lib/response';
 import * as testSubject from '../handler';
 
 describe('computeTotalStatus', () => {
