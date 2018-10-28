@@ -31,9 +31,11 @@
     "helmet": "^3.14.0",
     "jest": "^23.6.0",
     "jest-junit": "^5.2.0",
+    "luxon": "^1.4.4",
     "pino": "^5.8.0",
     "regenerator-runtime": "^0.12.1",
-    "response-time": "^2.3.2"
+    "response-time": "^2.3.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
