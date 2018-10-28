@@ -23,8 +23,12 @@ jobs:
               yarn install
               yarn lint
               yarn test
+              yarn stryker --maxConcurrentTestRunners 3
       - store_test_results:
           path: ~/repo/service/build/test/reports
+      - store_artifacts:
+          path: ~/repo/service/build/reports/mutation/html
+          destination: stryker-service
       - save_cache:
           name: "Save Service Cache"
           paths: 
