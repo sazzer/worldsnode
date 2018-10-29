@@ -1,6 +1,6 @@
 // @flow
 
-import * as testSubject from '../generator';
+import AccessTokenGenerator from '../generator';
 import {Settings} from 'luxon';
 
 jest.mock('uuid/v4', () => {
@@ -8,9 +8,10 @@ jest.mock('uuid/v4', () => {
 });
 
 test('Generate access token', () => {
+    const generator = new AccessTokenGenerator('P1Y');
     Settings.now = () => 0;
 
-    const token = testSubject.default('someUserId');
+    const token = generator.generate('someUserId');
 
     expect(token).toEqual({
         userId: 'someUserId',

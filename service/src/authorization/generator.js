@@ -5,20 +5,38 @@ import {DateTime, Duration} from 'luxon';
 import {type AccessToken} from './accessToken';
 
 /**
- * Generate an access token for the given User ID
+ * Mechanism to generate an access token for a user
  *
- * @param {string} userId The ID of the user the token is for
- * @return {AccessToken} the token
+ * @export
+ * @class AccessTokenGenerator
  */
-export default function generateAccessToken(userId: string): AccessToken {
-    const tokenDuration = Duration.fromISO('P1Y');
-    const now = DateTime.utc();
-    const expires = now.plus(tokenDuration);
+export default class AccessTokenGenerator {
+    /** The duration of the access token */
+    _tokenDuration: Duration;
 
-    return {
-        tokenId: uuid(),
-        userId: userId,
-        created: now.toJSDate(),
-        expires: expires.toJSDate(),
-    };
+    /**
+     * Construct the Access Token Generator
+     * @param {string} expiry The duration of the access tokens
+     */
+    constructor(expiry: string) {
+        this._tokenDuration = Duration.fromISO(expiry);
+    }
+
+    /**
+     * Generate an access token for the given User ID
+     *
+     * @param {string} userId The ID of the user the token is for
+     * @return {AccessToken} the token
+     */
+    generate(userId: string): AccessToken {
+        const now = DateTime.utc();
+        const expires = now.plus(this._tokenDuration);
+
+        return {
+            tokenId: uuid(),
+            userId: userId,
+            created: now.toJSDate(),
+            expires: expires.toJSDate(),
+        };
+    }
 }
