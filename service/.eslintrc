@@ -9,7 +9,8 @@
     "jest"
   ],
   "env": {
-    "jest/globals": true
+    "jest/globals": true,
+    "es6": true
   },
   "rules": {
     "indent": ["error", 4],
