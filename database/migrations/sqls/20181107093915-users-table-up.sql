@@ -3,7 +3,7 @@ CREATE TABLE users (
     version UUID NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL,
     updated TIMESTAMP WITH TIME ZONE NOT NULL,
-    display_name VARCHAR(100) NOT NULL,
-    email VARCHAR(260) NULL,
+    display_name TEXT NOT NULL,
+    email TEXT NULL,
     providers JSONB NOT NULL
 );
