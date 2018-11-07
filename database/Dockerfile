@@ -10,7 +10,7 @@ RUN npm install -g db-migrate db-migrate-pg
 
 # Copy migration files
 COPY docker/* /docker-entrypoint-initdb.d/
-COPY migrations/* /migrations/migrations/
+COPY migrations /migrations/migrations
 COPY database.json /migrations
 
 # Start Postgres
