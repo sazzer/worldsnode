@@ -9,6 +9,7 @@ import buildHealthchecksHandler from './health/rest';
 import buildAccessTokenGenerator from './authorization/generator';
 import buildAccessTokenSerializer from './authorization/serializer';
 import buildGenerateAccessTokenHandler from './authorization/rest/accessTokenHandler';
+import buildAccessTokenParser from './authorization/rest/accessTokenParser';
 
 const logger = pino();
 
@@ -16,6 +17,8 @@ const accessTokenGenerator = buildAccessTokenGenerator('P1Y');
 const accessTokenSerializer = buildAccessTokenSerializer('supersecretkey');
 
 const service = buildService([
+    buildAccessTokenParser(accessTokenSerializer),
+], [
     versionHandler,
     buildHealthchecksHandler([uptimeHealthchecks]),
     buildGenerateAccessTokenHandler(accessTokenSerializer, accessTokenGenerator),

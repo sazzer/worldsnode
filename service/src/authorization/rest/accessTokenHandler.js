@@ -12,6 +12,11 @@ import {type AccessTokenGenerator} from '../generator';
 /** The logger to use */
 const logger = pino();
 
+/** Type to represent the request body for requesting an access token */
+type AccessTokenRequestBody = {
+    userId: string
+};
+
 /**
  * Handler that will build an access token for the requested User ID
  *
@@ -23,18 +28,15 @@ const logger = pino();
  */
 export async function buildAccessToken(req: $Request, res: $Response,
     serializer: AccessTokenSerializer, generator: AccessTokenGenerator) {
-    if (req.body instanceof Object) {
-        const user = req.body.userId;
-        const token = generator.generate(user);
-        const serialized = await serializer.serialize(token);
+    const body = ((req.body: any): AccessTokenRequestBody);
+    const user: string = body.userId;
+    const token = generator.generate(user);
+    const serialized = await serializer.serialize(token);
 
-        logger.warn({user, token, serialized}, 'Building Access Token for User');
-        res.send({
-            token: serialized,
-        });
-    } else {
-        res.send(400);
-    }
+    logger.warn({user, token, serialized}, 'Building Access Token for User');
+    res.send({
+        token: serialized,
+    });
 }
 
 /**

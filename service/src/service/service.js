@@ -10,6 +10,9 @@ import printRoutes from 'express-routemap';
 import pino from 'express-pino-logger';
 
 import type {
+    $Request,
+    $Response,
+    NextFunction,
     Router,
 } from 'express';
 
@@ -18,10 +21,12 @@ export type HandlerRegistration = (Router) => void;
 
 /**
  * Build the service that we are going to run
+ * @param middleware Any middleware to register
  * @param handlers The handlers to use for the service
  * @return the actual webapp service
  */
-export default function buildService(handlers: Array<HandlerRegistration>) {
+export default function buildService(middleware: Array<($Request, $Response, NextFunction) => any>,
+    handlers: Array<HandlerRegistration>) {
     const app = express();
 
     app.use(responseTime());
@@ -33,6 +38,7 @@ export default function buildService(handlers: Array<HandlerRegistration>) {
     app.use(errorHandler());
     app.use(helmet());
     app.use(pino());
+    middleware.forEach((mw) => app.use(mw));
 
     const router = new express.Router();
     handlers.forEach((handler) => handler(router));
