@@ -1,6 +1,19 @@
 version: 2
 jobs:
-  build:
+  build_database:
+    machine: true
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Build Database Docker Image"
+          working_directory: ~/repo/database
+          command: |
+            ./build.sh
+
+  build_service:
     docker:
       # specify the version you desire here
       - image: circleci/node:10.12-stretch
@@ -16,7 +29,7 @@ jobs:
           - service-dependencies-{{ checksum "service/package.json" }}
           # fallback to using the latest cache if no exact match is found
           - service-dependencies-
-      - run: 
+      - run:
           name: "Build and Test Service"
           working_directory: ~/repo/service
           command: |
@@ -31,11 +44,11 @@ jobs:
           destination: stryker-service
       - save_cache:
           name: "Save Service Cache"
-          paths: 
+          paths:
             - ~/service/node_modules
           key: service-dependencies-{{ checksum "service/package.json" }}
 
-  test:
+  full_stack_test:
     machine: true
     working_directory: ~/repo
     steps:
@@ -53,7 +66,9 @@ workflows:
   version: 2
   full_build:
       jobs:
-          - build
-          - test:
+          - build_database
+          - build_service
+          - full_stack_test:
               requires:
-                  - build
+                  - build_database
+                  - build_service
