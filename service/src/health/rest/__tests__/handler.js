@@ -109,9 +109,9 @@ describe('buildComponents', () => {
 });
 
 describe('checkHealth', () => {
-    test('No healthchecks', () => {
+    test('No healthchecks', async () => {
         const response = new Response();
-        testSubject.default(response, []);
+        await testSubject.default(response, []);
 
         expect(response.type).toBeCalledWith('application/health+json');
         expect(response.status).toBeCalledWith(200);
@@ -120,18 +120,18 @@ describe('checkHealth', () => {
             details: {},
         });
     });
-    test('One passing healthcheck', () => {
+    test('One passing healthcheck', async () => {
         const healthcheck = jest.fn();
-        healthcheck.mockReturnValue([{
+        healthcheck.mockReturnValue([Promise.resolve({
             component: 'system',
             measurement: 'uptime',
             status: 'HEALTH_PASS',
             value: 5,
             unit: 'S',
-        }]);
+        })]);
 
         const response = new Response();
-        testSubject.default(response, [healthcheck]);
+        await testSubject.default(response, [healthcheck]);
 
         expect(response.type).toBeCalledWith('application/health+json');
         expect(response.status).toBeCalledWith(200);
@@ -147,18 +147,18 @@ describe('checkHealth', () => {
             },
         });
     });
-    test('One warning healthcheck', () => {
+    test('One warning healthcheck', async () => {
         const healthcheck = jest.fn();
-        healthcheck.mockReturnValue([{
+        healthcheck.mockReturnValue([Promise.resolve({
             component: 'system',
             measurement: 'uptime',
             status: 'HEALTH_WARN',
             value: 5,
             unit: 'S',
-        }]);
+        })]);
 
         const response = new Response();
-        testSubject.default(response, [healthcheck]);
+        await testSubject.default(response, [healthcheck]);
 
         expect(response.type).toBeCalledWith('application/health+json');
         expect(response.status).toBeCalledWith(200);
@@ -174,18 +174,18 @@ describe('checkHealth', () => {
             },
         });
     });
-    test('One failing healthcheck', () => {
+    test('One failing healthcheck', async () => {
         const healthcheck = jest.fn();
-        healthcheck.mockReturnValue([{
+        healthcheck.mockReturnValue([Promise.resolve({
             component: 'system',
             measurement: 'uptime',
             status: 'HEALTH_FAIL',
             value: 5,
             unit: 'S',
-        }]);
+        })]);
 
         const response = new Response();
-        testSubject.default(response, [healthcheck]);
+        await testSubject.default(response, [healthcheck]);
 
         expect(response.type).toBeCalledWith('application/health+json');
         expect(response.status).toBeCalledWith(500);

@@ -18,4 +18,4 @@ export const HEALTH_WARN = 'HEALTH_WARN';
 export const HEALTH_FAIL = 'HEALTH_FAIL';
 
 /** Type representing something that can check some health components */
-export type HealthChecker = () => Array<Health>;
+export type HealthChecker = () => Array<Promise<Health>>;

@@ -34,6 +34,7 @@
     "jest-junit": "^5.2.0",
     "jsonwebtoken": "^8.3.0",
     "luxon": "^1.4.4",
+    "pg": "^7.6.0",
     "pino": "^5.8.0",
     "regenerator-runtime": "^0.12.1",
     "response-time": "^2.3.2",

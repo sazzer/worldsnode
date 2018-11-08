@@ -16,5 +16,12 @@
             "default": 3000,
             "env": "PORT"
         }
+    },
+    "postgres": {
+        "uri": {
+            "doc": "The database connection string",
+            "default": "",
+            "env": "PG_URI"
+        }
     }
 }

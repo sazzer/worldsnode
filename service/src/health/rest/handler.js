@@ -82,17 +82,19 @@ export function buildComponents(results: Array<Health>): { [string]: Array<Healt
  * @param res The response to write to
  * @param healthchecks The healthchecks to perform
  */
-export default function checkHealth(res: $Response, healthchecks: Array<HealthChecker>) {
-    const results = healthchecks
+export default async function checkHealth(res: $Response, healthchecks: Array<HealthChecker>) {
+    const results: Array<Promise<Health>> = healthchecks
         .map((healthcheck) => healthcheck())
         .reduce((a, b) => a.concat(b), []);
 
-    const totalStatus = results.map((result) => result.status)
+    const resolvedResults = await Promise.all(results);
+
+    const totalStatus = resolvedResults.map((result) => result.status)
         .reduce(computeTotalStatus, HEALTH_PASS);
 
     const response: HealthCheckResponse = {
         status: HEALTH_STATUSES[totalStatus],
-        details: buildComponents(results),
+        details: buildComponents(resolvedResults),
     };
 
     res
