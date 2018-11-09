@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "lint": "flow",
-    "api-test": "jest --notify --config=api-test.json",
+    "api-test": "jest --notify --config=api-test.json --runInBand",
     "test-suite": "yarn api-test"
   },
   "dependencies": {

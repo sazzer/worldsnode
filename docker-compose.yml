@@ -8,3 +8,5 @@ services:
         build: ./service
         ports:
             - "127.0.0.1:3000:3000"
+        environment:
+            PG_URI: postgres://postgres:postgres@database:5432/postgres

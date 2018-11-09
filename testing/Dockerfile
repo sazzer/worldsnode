@@ -1,6 +1,7 @@
 FROM node:10.12.0-alpine
 
 ENV SERVICE_URI=http://service:3000
+ENV PG_URI=postgres://postgres:postgres@database:5432/postgres
 
 # Set up Dockerize
 RUN apk add --no-cache openssl
