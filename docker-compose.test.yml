@@ -4,6 +4,8 @@ services:
         build: ./database
     service:
         build: ./service
+        environment:
+            PG_URI: postgres://postgres:postgres@database:5432/postgres
     testing:
         build: ./testing
         volumes:
