@@ -1,0 +1,18 @@
+{
+    "@context": {
+        "Person": "http://schema.org/Person",
+        "User": "/jsonld/types/User",
+        "created": "http://schema.org/dateCreated",
+        "updated": "http://schema.org/dateModified",
+        "name": "http://schema.org/name",
+        "email": "http://schema.org/email",
+        "logins": {
+            "@id": "/jsonld/logins",
+            "@type": "/jsonld/types/Login",
+            "@container": "@set"
+        },
+        "provider": "/jsonld/provider",
+        "providerId": "/jsonld/providerId",
+        "providerName": "/jsonld/providerName"
+    }
+}

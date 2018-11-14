@@ -44,6 +44,8 @@ export default function buildService(middleware: Array<($Request, $Response, Nex
     handlers.forEach((handler) => handler(router));
     app.use(router);
 
+    app.use('/jsonld', express.static('contexts'));
+
     printRoutes(app);
     return app;
 }
