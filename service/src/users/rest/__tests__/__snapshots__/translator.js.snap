@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`translateUserToModel Translating a full user 1`] = `
+Object {
+  "@context": "/jsonld/users/User.jsonld",
+  "@id": "/api/users/123",
+  "@type": Array [
+    "Person",
+    "User",
+  ],
+  "created": 2018-11-15T09:34:00.000Z,
+  "email": "graham@grahamcox.co.uk",
+  "logins": Array [
+    Object {
+      "@type": "Login",
+      "provider": "google",
+      "providerId": "123456",
+      "providerName": "graham@grahamcox.co.uk",
+    },
+  ],
+  "name": "Graham",
+  "updated": 2018-11-15T09:34:00.000Z,
+}
+`;
+
+exports[`translateUserToModel Translating a minimal user 1`] = `
+Object {
+  "@context": "/jsonld/users/User.jsonld",
+  "@id": "/api/users/123",
+  "@type": Array [
+    "Person",
+    "User",
+  ],
+  "created": 2018-11-15T09:34:00.000Z,
+  "email": undefined,
+  "logins": Array [],
+  "name": "Graham",
+  "updated": 2018-11-15T09:34:00.000Z,
+}
+`;

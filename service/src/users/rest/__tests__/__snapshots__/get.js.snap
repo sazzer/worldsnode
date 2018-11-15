@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GET /api/users/123 When the user exists 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      Object {
+        "@context": "/jsonld/users/User.jsonld",
+        "@id": "/api/users/123",
+        "@type": Array [
+          "Person",
+          "User",
+        ],
+        "created": 2018-11-15T09:34:00.000Z,
+        "email": undefined,
+        "logins": Array [],
+        "name": "Graham",
+        "updated": 2018-11-15T09:34:00.000Z,
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "isThrow": false,
+      "value": undefined,
+    },
+  ],
+}
+`;

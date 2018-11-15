@@ -1,18 +1,22 @@
 {
     "@context": {
-        "Person": "http://schema.org/Person",
-        "User": "/jsonld/types/User",
-        "created": "http://schema.org/dateCreated",
-        "updated": "http://schema.org/dateModified",
-        "name": "http://schema.org/name",
-        "email": "http://schema.org/email",
+        "schema": "http://schema.org/",
+        "worlds": "http://worlds/jsonld/vocab.jsonld#",
+
+        "Person": "schema:Person",
+        "User": "worlds:User",
+        "Login": "worlds:Login",
+
+        "created": "schema:dateCreated",
+        "updated": "schema:dateModified",
+        "name": "schema:name",
+        "email": "schema:email",
         "logins": {
-            "@id": "/jsonld/logins",
-            "@type": "/jsonld/types/Login",
+            "@id": "worlds:User/logins",
             "@container": "@set"
         },
-        "provider": "/jsonld/provider",
-        "providerId": "/jsonld/providerId",
-        "providerName": "/jsonld/providerName"
+        "provider": "worlds:Login/provider",
+        "providerId": "worlds:Login/providerId",
+        "providerName": "worlds:Login/providerName"
     }
 }

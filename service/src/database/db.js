@@ -32,6 +32,10 @@ export function executeQuery(pool: Pool, query: Query): Promise<QueryResult> {
         .then((res) => {
             logger.debug({...query, result: res}, 'Executed query');
             return res.rows;
+        })
+        .catch((e) => {
+            logger.warn({...query, error: e}, 'Error executing query');
+            throw e;
         });
 }
 

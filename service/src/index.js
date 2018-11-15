@@ -12,6 +12,8 @@ import buildAccessTokenGenerator from './authorization/generator';
 import buildAccessTokenSerializer from './authorization/serializer';
 import buildGenerateAccessTokenHandler from './authorization/rest/accessTokenHandler';
 import buildAccessTokenParser from './authorization/rest/accessTokenParser';
+import buildUserRetriever from './users/service/retriever';
+import buildUsersRoutes from './users/rest';
 
 const logger = pino();
 
@@ -20,12 +22,15 @@ const database = buildDatabase(config.get('postgres.uri'));
 const accessTokenGenerator = buildAccessTokenGenerator('P1Y');
 const accessTokenSerializer = buildAccessTokenSerializer('supersecretkey');
 
+const userRetriever = buildUserRetriever(database);
+
 const service = buildService([
     buildAccessTokenParser(accessTokenSerializer),
 ], [
     versionHandler,
     buildHealthchecksHandler([uptimeHealthchecks, buildDatabaseHealthcheck(database)]),
     buildGenerateAccessTokenHandler(accessTokenSerializer, accessTokenGenerator),
+    buildUsersRoutes(userRetriever),
 ]);
 const port = config.get('http.port');
 service.listen(port, () => logger.info({port}, 'Service started'));
