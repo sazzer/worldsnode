@@ -55,5 +55,16 @@ func (s *Service) AddMiddleware() {
 func (s *Service) Start() {
 	log.Info("Starting service")
 
+	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+		log.WithField("method", method).
+			WithField("path", route).
+			Info("Defined route")
+		return nil
+	}
+
+	if err := chi.Walk(s.router, walkFunc); err != nil {
+		log.WithError(err).Error("Failed to log routes")
+	}
+
 	http.ListenAndServe(":3000", s.router)
 }
