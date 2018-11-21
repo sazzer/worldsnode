@@ -5,6 +5,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"grahamcox.co.uk/worlds/service/internal/health"
+	"grahamcox.co.uk/worlds/service/internal/version"
 	"grahamcox.co.uk/worlds/service/internal/service"
 )
 
@@ -45,5 +46,6 @@ func Main() {
 
 	service := service.New()
 	service.AddRoutes(healthchecker.DefineRoutes)
+	service.AddRoutes(version.DefineRoutes)
 	service.Start()
 }
