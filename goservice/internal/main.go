@@ -40,7 +40,6 @@ func Main() {
 	logrus.SetFormatter(formatter)
 
 	healthchecker := health.New(
-		dummyHealthcheck{health.Warn},
 		dummyHealthcheck{health.Pass},
 	)
 
