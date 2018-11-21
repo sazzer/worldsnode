@@ -3,7 +3,7 @@ services:
     database:
         build: ./database
     service:
-        build: ./service
+        build: ./goservice
         environment:
             PG_URI: postgres://postgres:postgres@database:5432/postgres
     testing:
