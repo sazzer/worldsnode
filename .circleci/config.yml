@@ -33,12 +33,14 @@ jobs:
           name: "Get Dependencies"
           command: |
               go get github.com/jstemmer/go-junit-report
+              go get golang.org/x/lint/golint
       - run:
           name: "Build and Test Service"
           working_directory: ~/repo/goservice
           command: |
               export GO111MODULE=on
               go mod tidy
+              golint ./...
               mkdir -p /tmp/test-results
               go test -v ./... 2>&1 | tee /tmp/test-results/output
               cat /tmp/test-results/output | go-junit-report > /tmp/test-results/go-test.xml
