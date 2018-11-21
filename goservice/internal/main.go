@@ -34,7 +34,7 @@ func (d dummyHealthcheck) CheckHealth(c chan<- health.Healthcheck) {
 }
 
 // Main is the main entry point into the application
-func Main() {
+func Main(config Config) {
 	formatter := &logrus.TextFormatter{
 		FullTimestamp: true,
 	}
@@ -44,7 +44,7 @@ func Main() {
 		dummyHealthcheck{health.Pass},
 	)
 
-	service := service.New()
+	service := service.New(config.HTTP)
 	service.AddRoutes(healthchecker.DefineRoutes)
 	service.AddRoutes(version.DefineRoutes)
 	service.Start()

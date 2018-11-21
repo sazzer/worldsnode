@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -13,11 +14,12 @@ import (
 
 // Service is the actual Web Service
 type Service struct {
+	config Config
 	router *chi.Mux
 }
 
 // New will create a new Web Service to work with
-func New() Service {
+func New(config Config) Service {
 	cors := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -37,6 +39,7 @@ func New() Service {
 	router.Use(middleware.Timeout(60 * time.Second))
 
 	return Service{
+		config,
 		router,
 	}
 }
@@ -66,5 +69,7 @@ func (s *Service) Start() {
 		log.WithError(err).Error("Failed to log routes")
 	}
 
-	http.ListenAndServe(":3000", s.router)
+	listenAddress := fmt.Sprintf(":%d", s.config.Port)
+	log.WithField("address", listenAddress).Info("Service started")
+	http.ListenAndServe(listenAddress, s.router)
 }
