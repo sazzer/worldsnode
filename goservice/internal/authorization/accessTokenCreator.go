@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
+	"grahamcox.co.uk/worlds/service/internal/clients"
+	"grahamcox.co.uk/worlds/service/internal/users"
 )
 
 // AccessTokenCreator represents a means to create access tokens for users
@@ -21,7 +23,7 @@ func NewAccessTokenCreator(clock clock.Clock, duration time.Duration) AccessToke
 }
 
 // NewAccessToken creates a new access token for the given user, coming from the given client
-func (a *AccessTokenCreator) NewAccessToken(user string, client string) AccessToken {
+func (a *AccessTokenCreator) NewAccessToken(user users.UserID, client clients.ClientID) AccessToken {
 	now := a.clock.Now()
 	expires := now.Add(a.duration)
 
