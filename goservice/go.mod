@@ -2,6 +2,7 @@ module grahamcox.co.uk/worlds/service
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
+	github.com/benbjohnson/clock v0.0.0-20161215174838-7dc76406b6d3
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
 	github.com/go-chi/chi v3.3.3+incompatible
 	github.com/go-chi/cors v1.0.0
