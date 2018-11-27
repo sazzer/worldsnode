@@ -21,7 +21,7 @@ func (d testHealthcheck) CheckHealth(c chan<- Healthcheck) {
 func TestNoHealthchecks(t *testing.T) {
 	healthchecker := New()
 
-	results := healthchecker.CheckHealth()
+	results := healthchecker.checkHealth()
 
 	assert.Equal(t, 0, len(results))
 }
@@ -32,7 +32,7 @@ func TestSingleHealthcheck(t *testing.T) {
 	for _, tt := range tests {
 		healthchecker := New(testHealthcheck{tt})
 
-		results := healthchecker.CheckHealth()
+		results := healthchecker.checkHealth()
 
 		assert.Equal(t, 1, len(results))
 		assert.Equal(t, Healthcheck{Component: "dummy", Measurement: "check", Status: tt}, results[0])
@@ -46,7 +46,7 @@ func TestMultipleHealthchecks(t *testing.T) {
 		testHealthcheck{Fail},
 	)
 
-	results := healthchecker.CheckHealth()
+	results := healthchecker.checkHealth()
 
 	assert.Equal(t, 3, len(results))
 	// TODO: Check the actual results

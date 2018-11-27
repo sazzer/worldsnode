@@ -27,17 +27,17 @@ func NewCreator(clock clock.Clock, duration time.Duration) Creator {
 }
 
 // NewAccessToken creates a new access token for the given user, coming from the given client
-func (a *Creator) NewAccessToken(user users.UserID, client clients.ClientID) AccessToken {
+func (a *Creator) NewAccessToken(user users.ID, client clients.ID) AccessToken {
 	now := a.clock.Now()
 	expires := now.Add(a.duration)
 	id := a.idGenerator()
 
 	return AccessToken{
-		AccessTokenID: AccessTokenID(id.String()),
-		UserID:        user,
-		ClientID:      client,
-		Created:       now,
-		Expires:       expires,
-		Scopes:        []string{},
+		accessTokenID: ID(id.String()),
+		userID:        user,
+		clientID:      client,
+		created:       now,
+		expires:       expires,
+		scopes:        []string{},
 	}
 }

@@ -30,13 +30,13 @@ func (s *Serializer) Serialize(token AccessToken) string {
 	logrus.WithField("accessToken", token).Debug("Serializing access token")
 
 	jot := &jwt.JWT{
-		Issuer:         string(token.ClientID),
-		Subject:        string(token.UserID),
+		Issuer:         string(token.ClientID()),
+		Subject:        string(token.UserID()),
 		Audience:       audience,
-		ExpirationTime: token.Expires.Unix(),
-		NotBefore:      token.Created.Unix(),
-		IssuedAt:       token.Created.Unix(),
-		ID:             string(token.AccessTokenID),
+		ExpirationTime: token.Expires().Unix(),
+		NotBefore:      token.Created().Unix(),
+		IssuedAt:       token.Created().Unix(),
+		ID:             string(token.ID()),
 	}
 	jot.SetAlgorithm(s.signer)
 

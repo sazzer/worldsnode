@@ -35,7 +35,7 @@ func New(componentHealthcheckers ...ComponentHealthchecker) Healthchecker {
 }
 
 // CheckHealth will execute every healthcheck that is registered and return the composite of them all
-func (h *Healthchecker) CheckHealth() []Healthcheck {
+func (h *Healthchecker) checkHealth() []Healthcheck {
 	results := []Healthcheck{}
 
 	log.Info("Starting healthchecks")

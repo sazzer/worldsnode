@@ -11,12 +11,12 @@ func TestSerialize(t *testing.T) {
 	now, _ := time.Parse(time.RFC3339, "2018-11-26T17:46:00Z")
 
 	accessToken := AccessToken{
-		AccessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
-		UserID:        "userID",
-		ClientID:      "clientID",
-		Created:       now,
-		Expires:       now.Add(5 * time.Hour),
-		Scopes:        []string{},
+		accessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
+		userID:        "userID",
+		clientID:      "clientID",
+		created:       now,
+		expires:       now.Add(5 * time.Hour),
+		scopes:        []string{},
 	}
 
 	testSubject := NewSerializer("mySuperSecret")

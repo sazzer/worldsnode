@@ -23,12 +23,12 @@ func TestCreateAccessToken(t *testing.T) {
 	accessToken := testSubject.NewAccessToken("userId", "clientId")
 
 	expected := AccessToken{
-		AccessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
-		UserID:        "userId",
-		ClientID:      "clientId",
-		Created:       now,
-		Expires:       now.Add(duration),
-		Scopes:        []string{},
+		accessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
+		userID:        "userId",
+		clientID:      "clientId",
+		created:       now,
+		expires:       now.Add(duration),
+		scopes:        []string{},
 	}
 
 	assert.Equal(t, expected, accessToken)

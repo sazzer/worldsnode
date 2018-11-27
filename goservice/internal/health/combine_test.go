@@ -6,14 +6,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type CombineHealthTests struct {
+type combineHealthTests struct {
 	old      string
 	new      string
 	expected string
 }
 
 func TestCombineHealth(t *testing.T) {
-	tests := []CombineHealthTests{
+	tests := []combineHealthTests{
 		{Pass, Pass, Pass},
 		{Pass, Warn, Warn},
 		{Pass, Fail, Fail},

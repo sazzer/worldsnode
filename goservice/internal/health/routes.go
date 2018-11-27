@@ -6,5 +6,5 @@ import (
 
 // DefineRoutes will add the routes for the HealthChecks endpoints
 func (h *Healthchecker) DefineRoutes(r chi.Router) {
-	r.Get("/health", h.Get)
+	r.Get("/health", h.get)
 }

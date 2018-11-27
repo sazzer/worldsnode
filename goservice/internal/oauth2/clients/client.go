@@ -1,4 +1,4 @@
 package clients
 
-// ClientID represents the ID of an OAuth2 Client
-type ClientID string
+// ID represents the ID of an OAuth2 Client
+type ID string
