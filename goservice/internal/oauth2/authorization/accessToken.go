@@ -3,7 +3,7 @@ package authorization
 import (
 	"time"
 
-	"grahamcox.co.uk/worlds/service/internal/clients"
+	"grahamcox.co.uk/worlds/service/internal/oauth2/clients"
 	"grahamcox.co.uk/worlds/service/internal/users"
 )
 

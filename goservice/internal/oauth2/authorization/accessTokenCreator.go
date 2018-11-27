@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
-	"grahamcox.co.uk/worlds/service/internal/clients"
+	"grahamcox.co.uk/worlds/service/internal/oauth2/clients"
 	"grahamcox.co.uk/worlds/service/internal/users"
 )
 
