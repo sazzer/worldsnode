@@ -1,10 +1,11 @@
-package authorization
+package accesstoken
 
 import (
 	"testing"
 	"time"
 
 	"github.com/benbjohnson/clock"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,16 +16,19 @@ func TestCreateAccessToken(t *testing.T) {
 	mockClock := clock.NewMock()
 	mockClock.Set(now)
 
-	testSubject := NewAccessTokenCreator(mockClock, duration)
-
+	testSubject := NewCreator(mockClock, duration)
+	testSubject.idGenerator = func() uuid.UUID {
+		return uuid.MustParse("8baeefb4-dea3-4add-a4bc-b177e44b97f2")
+	}
 	accessToken := testSubject.NewAccessToken("userId", "clientId")
 
 	expected := AccessToken{
-		UserID:   "userId",
-		ClientID: "clientId",
-		Created:  now,
-		Expires:  now.Add(duration),
-		Scopes:   []string{},
+		AccessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
+		UserID:        "userId",
+		ClientID:      "clientId",
+		Created:       now,
+		Expires:       now.Add(duration),
+		Scopes:        []string{},
 	}
 
 	assert.Equal(t, expected, accessToken)

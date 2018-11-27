@@ -4,8 +4,10 @@ require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/benbjohnson/clock v0.0.0-20161215174838-7dc76406b6d3
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
+	github.com/gbrlsnchs/jwt/v2 v2.0.0
 	github.com/go-chi/chi v3.3.3+incompatible
 	github.com/go-chi/cors v1.0.0
+	github.com/google/uuid v1.1.0
 	github.com/lib/pq v1.0.0
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/viper v1.2.1
