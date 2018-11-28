@@ -22,7 +22,13 @@ const (
 var InvalidAccessTokenError = errors.Errorf("Invalid Access Token")
 
 // Serializer is a means to serialise and deserialise Access Tokens to strings
-type Serializer struct {
+type Serializer interface {
+	Serialize(token AccessToken) string
+	Deserialize(token string) (*AccessToken, error)
+}
+
+// serializerImpl is a means to serialise and deserialise Access Tokens to strings
+type serializerImpl struct {
 	signer jwt.Signer
 	clock  clock.Clock
 }
@@ -31,14 +37,14 @@ type Serializer struct {
 func NewSerializer(secret string, clock clock.Clock) Serializer {
 	signer := jwt.NewHS512(secret)
 
-	return Serializer{
+	return &serializerImpl{
 		signer: signer,
 		clock:  clock,
 	}
 }
 
 // Serialize will transform an Access Token into a String
-func (s *Serializer) Serialize(token AccessToken) string {
+func (s *serializerImpl) Serialize(token AccessToken) string {
 	logrus.WithField("accessToken", token).Debug("Serializing access token")
 
 	jot := &jwt.JWT{
@@ -88,7 +94,7 @@ func (s *Serializer) Serialize(token AccessToken) string {
 
 // Deserialize will transform a String into an Access Token, or else return an error if the string
 // wasn't a valid serialized Access Token created by the Serialize() function
-func (s *Serializer) Deserialize(token string) (*AccessToken, error) {
+func (s *serializerImpl) Deserialize(token string) (*AccessToken, error) {
 	payload, sig, err := jwt.Parse(token)
 	if err != nil {
 		logrus.

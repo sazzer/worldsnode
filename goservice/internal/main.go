@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"github.com/benbjohnson/clock"
+	"grahamcox.co.uk/worlds/service/internal/oauth2/accessToken"
 	"github.com/sirupsen/logrus"
 	"grahamcox.co.uk/worlds/service/internal/health"
 	"grahamcox.co.uk/worlds/service/internal/version"
@@ -20,12 +22,19 @@ func Main(config Config) {
 		panic("Failed to open database connection. Aborting.")
 	}
 
+	systemClock := clock.New()
+
+	accessTokenSerializer := accesstoken.NewSerializer("", systemClock)
+
 	healthchecker := health.New(
 		db,
 	)
 
 	service := service.New(config.HTTP)
+	service.AddMiddleware(accesstoken.NewMiddleware(accessTokenSerializer))
+
 	service.AddRoutes(healthchecker.DefineRoutes)
 	service.AddRoutes(version.DefineRoutes)
+
 	service.Start()
 }

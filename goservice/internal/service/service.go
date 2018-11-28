@@ -50,8 +50,8 @@ func (s *Service) AddRoutes(routeDefiner func(chi.Router)) {
 }
 
 // AddMiddleware will add the provided middleware to the service
-func (s *Service) AddMiddleware() {
-
+func (s *Service) AddMiddleware(middleware func(http.Handler) http.Handler) {
+	s.router.Use(middleware)
 }
 
 // Start will start the Web Service listening
