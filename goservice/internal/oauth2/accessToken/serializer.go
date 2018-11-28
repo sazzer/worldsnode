@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/benbjohnson/clock"
+
 	"github.com/go-errors/errors"
 	"grahamcox.co.uk/worlds/service/internal/oauth2/clients"
 	"grahamcox.co.uk/worlds/service/internal/users"
@@ -22,14 +24,16 @@ var InvalidAccessTokenError = errors.Errorf("Invalid Access Token")
 // Serializer is a means to serialise and deserialise Access Tokens to strings
 type Serializer struct {
 	signer jwt.Signer
+	clock  clock.Clock
 }
 
 // NewSerializer creates a new Access Token Serializer
-func NewSerializer(secret string) Serializer {
+func NewSerializer(secret string, clock clock.Clock) Serializer {
 	signer := jwt.NewHS512(secret)
 
 	return Serializer{
 		signer: signer,
+		clock:  clock,
 	}
 }
 
@@ -111,9 +115,12 @@ func (s *Serializer) Deserialize(token string) (*AccessToken, error) {
 		return nil, errors.New(InvalidAccessTokenError)
 	}
 
+	now := s.clock.Now()
 	audienceValidator := jwt.AudienceValidator(audience)
+	issuedAtValidator := jwt.IssuedAtValidator(now)
+	expiresValidator := jwt.ExpirationTimeValidator(now)
 
-	if err = jot.Validate(audienceValidator); err != nil {
+	if err = jot.Validate(audienceValidator, issuedAtValidator, expiresValidator); err != nil {
 		logrus.
 			WithField("accessToken", token).
 			WithField("jot", jot).
