@@ -4,9 +4,17 @@ import (
 	"net/http"
 	"strings"
 
+	"grahamcox.co.uk/worlds/service/internal/rest/problem"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
+
+// AuthProblem is the Problem type for authentication issues
+type AuthProblem struct {
+	problem.Problem
+	Token string `json:"token"`
+}
 
 // accessTokenMiddleware is the actual middleware that will do the processing.
 // If there is no Authorization header then the request is passed on
@@ -43,7 +51,18 @@ func accessTokenMiddleware(serializer Serializer, c *gin.Context) {
 			WithError(err).
 			WithField("authorization", authorizationHeader).
 			Warn("Failed to parse access token")
-		c.AbortWithStatus(http.StatusForbidden)
+		problem := AuthProblem{
+			Problem: problem.Problem{
+				Type:   "tag:grahamcox.co.uk,2018,worlds/problems/invalid_access_token",
+				Title:  "The provided Access Token was invalid",
+				Status: http.StatusForbidden,
+			},
+			Token: token,
+		}
+
+		c.Header("Content-Type", "application/problem+json")
+		c.JSON(http.StatusForbidden, problem)
+		c.Abort()
 	} else {
 		logrus.
 			WithField("authorization", authorizationHeader).

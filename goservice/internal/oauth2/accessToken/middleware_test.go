@@ -18,6 +18,7 @@ func TestNoAuthHeader(t *testing.T) {
 	serializer := testSerializer{}
 	resp := performTest("", &serializer)
 	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, "application/json; charset=utf-8", resp.Header().Get("Content-Type"))
 	assert.Equal(t, "{\"exists\":false}", resp.Body.String())
 }
 
@@ -25,6 +26,7 @@ func TestNoBearerAuthHeader(t *testing.T) {
 	serializer := testSerializer{}
 	resp := performTest("Basic abc", &serializer)
 	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, "application/json; charset=utf-8", resp.Header().Get("Content-Type"))
 	assert.Equal(t, "{\"exists\":false}", resp.Body.String())
 }
 
@@ -33,7 +35,8 @@ func TestInvalidBearerAuthHeader(t *testing.T) {
 	serializer := testSerializer{"", nil, err}
 	resp := performTest("Bearer abc123", &serializer)
 	assert.Equal(t, http.StatusForbidden, resp.Code)
-	assert.Equal(t, "", resp.Body.String())
+	assert.Equal(t, "application/problem+json", resp.Header().Get("Content-Type"))
+	assert.Equal(t, "{\"type\":\"tag:grahamcox.co.uk,2018,worlds/problems/invalid_access_token\",\"title\":\"The provided Access Token was invalid\",\"status\":403,\"token\":\"abc123\"}", resp.Body.String())
 	assert.Equal(t, "abc123", serializer.seenToken)
 }
 
@@ -50,6 +53,7 @@ func TestVaalidBearerAuthHeader(t *testing.T) {
 	serializer := testSerializer{"", &accessToken, nil}
 	resp := performTest("Bearer abc123", &serializer)
 	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, "application/json; charset=utf-8", resp.Header().Get("Content-Type"))
 	assert.Equal(t, "{\"exists\":true}", resp.Body.String())
 	assert.Equal(t, "abc123", serializer.seenToken)
 }
