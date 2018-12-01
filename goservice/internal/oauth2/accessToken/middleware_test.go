@@ -7,19 +7,57 @@ import (
 	"time"
 
 	"github.com/go-errors/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/gin-gonic/gin"
 )
+
+func TestNoAuthHeader(t *testing.T) {
+	serializer := testSerializer{}
+	resp := performTest("", &serializer)
+	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, "{\"exists\":false}", resp.Body.String())
+}
+
+func TestNoBearerAuthHeader(t *testing.T) {
+	serializer := testSerializer{}
+	resp := performTest("Basic abc", &serializer)
+	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, "{\"exists\":false}", resp.Body.String())
+}
+
+func TestInvalidBearerAuthHeader(t *testing.T) {
+	err := errors.New("Oops")
+	serializer := testSerializer{"", nil, err}
+	resp := performTest("Bearer abc123", &serializer)
+	assert.Equal(t, http.StatusForbidden, resp.Code)
+	assert.Equal(t, "", resp.Body.String())
+	assert.Equal(t, "abc123", serializer.seenToken)
+}
+
+func TestVaalidBearerAuthHeader(t *testing.T) {
+	accessToken := AccessToken{
+		accessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
+		userID:        "userId",
+		clientID:      "clientId",
+		created:       now,
+		expires:       now.Add(1 * time.Hour),
+		scopes:        []string{},
+	}
+
+	serializer := testSerializer{"", &accessToken, nil}
+	resp := performTest("Bearer abc123", &serializer)
+	assert.Equal(t, http.StatusOK, resp.Code)
+	assert.Equal(t, "{\"exists\":true}", resp.Body.String())
+	assert.Equal(t, "abc123", serializer.seenToken)
+}
 
 type testSerializer struct {
 	seenToken   string
 	accessToken *AccessToken
 	error       error
-}
-
-type testHandler struct {
-	wasCalled bool
-	req       *http.Request
 }
 
 func (t *testSerializer) Serialize(token AccessToken) string {
@@ -31,68 +69,29 @@ func (t *testSerializer) Deserialize(token string) (*AccessToken, error) {
 	return t.accessToken, t.error
 }
 
-func (t *testHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	t.wasCalled = true
-	t.req = r
+func init() {
+	gin.SetMode(gin.TestMode)
+	logrus.SetLevel(logrus.DebugLevel)
 }
 
-func TestNoAuthHeader(t *testing.T) {
-	serializer := testSerializer{}
-	next := testHandler{}
-	req := httptest.NewRequest("GET", "/abc", nil)
-	res := httptest.NewRecorder()
+func newRouter(serializer *testSerializer) *gin.Engine {
+	router := gin.New()
+	router.Use(NewMiddleware(serializer))
+	router.GET("/", func(c *gin.Context) {
+		_, exists := c.Get("accessToken")
 
-	accessTokenMiddleware(&serializer, &next, res, req)
-
-	assert.True(t, next.wasCalled)
+		c.JSON(http.StatusOK, gin.H{
+			"exists": exists,
+		})
+	})
+	return router
 }
 
-func TestNoBearerAuthHeader(t *testing.T) {
-	serializer := testSerializer{}
-	next := testHandler{}
-	req := httptest.NewRequest("GET", "/abc", nil)
-	req.Header.Set("Authorization", "Basic abc123")
-	res := httptest.NewRecorder()
-
-	accessTokenMiddleware(&serializer, &next, res, req)
-
-	assert.True(t, next.wasCalled)
-}
-
-func TestInvalidBearerAuthHeader(t *testing.T) {
-	err := errors.New("Oops")
-	serializer := testSerializer{"", nil, err}
-	next := testHandler{}
-	req := httptest.NewRequest("GET", "/abc", nil)
-	req.Header.Set("Authorization", "Bearer abc123")
-	res := httptest.NewRecorder()
-
-	accessTokenMiddleware(&serializer, &next, res, req)
-
-	assert.False(t, next.wasCalled)
-	assert.Equal(t, http.StatusForbidden, res.Code)
-	assert.Equal(t, "abc123", serializer.seenToken)
-}
-
-func TestValidBearerAuthHeader(t *testing.T) {
-	accessToken := AccessToken{
-		accessTokenID: "8baeefb4-dea3-4add-a4bc-b177e44b97f2",
-		userID:        "userId",
-		clientID:      "clientId",
-		created:       now,
-		expires:       now.Add(1 * time.Hour),
-		scopes:        []string{},
-	}
-
-	serializer := testSerializer{"", &accessToken, nil}
-	next := testHandler{}
-	req := httptest.NewRequest("GET", "/abc", nil)
-	req.Header.Set("Authorization", "Bearer abc123")
-	res := httptest.NewRecorder()
-
-	accessTokenMiddleware(&serializer, &next, res, req)
-
-	assert.True(t, next.wasCalled)
-	assert.Equal(t, "abc123", serializer.seenToken)
-	assert.Equal(t, &accessToken, next.req.Context().Value("accessToken"))
+func performTest(header string, serializer *testSerializer) *httptest.ResponseRecorder {
+	router := newRouter(serializer)
+	req, _ := http.NewRequest(http.MethodGet, "/", nil)
+	req.Header.Set("Authorization", header)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	return w
 }

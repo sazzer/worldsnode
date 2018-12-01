@@ -2,12 +2,9 @@ package service
 
 import (
 	"fmt"
-	"net/http"
-	"time"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/toorop/gin-logrus"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -15,42 +12,36 @@ import (
 // Service is the actual Web Service
 type Service struct {
 	config Config
-	router *chi.Mux
+	router *gin.Engine
 }
 
 // New will create a new Web Service to work with
 func New(config Config) Service {
-	cors := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
-	})
+	gin.SetMode(gin.ReleaseMode)
 
-	router := chi.NewRouter()
-	router.Use(middleware.RequestID)
-	router.Use(middleware.RealIP)
-	router.Use(middleware.Logger)
-	router.Use(middleware.GetHead)
-	router.Use(cors.Handler)
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.Timeout(60 * time.Second))
+	r := gin.New()
+
+	r.Use(ginlogrus.Logger(log.New()))
+	r.Use(gin.Recovery())
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 
 	return Service{
 		config,
-		router,
+		r,
 	}
 }
 
 // AddRoutes will define routes on the service provided by the given Router Definition function
-func (s *Service) AddRoutes(routeDefiner func(chi.Router)) {
-	routeDefiner(s.router)
+func (s *Service) AddRoutes(routeDefiner func(*gin.RouterGroup)) {
+	routeDefiner(&s.router.RouterGroup)
 }
 
 // AddMiddleware will add the provided middleware to the service
-func (s *Service) AddMiddleware(middleware func(http.Handler) http.Handler) {
+func (s *Service) AddMiddleware(middleware func(*gin.Context)) {
 	s.router.Use(middleware)
 }
 
@@ -58,18 +49,8 @@ func (s *Service) AddMiddleware(middleware func(http.Handler) http.Handler) {
 func (s *Service) Start() {
 	log.Info("Starting service")
 
-	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
-		log.WithField("method", method).
-			WithField("path", route).
-			Info("Defined route")
-		return nil
-	}
-
-	if err := chi.Walk(s.router, walkFunc); err != nil {
-		log.WithError(err).Error("Failed to log routes")
-	}
-
 	listenAddress := fmt.Sprintf(":%d", s.config.Port)
 	log.WithField("address", listenAddress).Info("Service started")
-	http.ListenAndServe(listenAddress, s.router)
+
+	s.router.Run(listenAddress)
 }

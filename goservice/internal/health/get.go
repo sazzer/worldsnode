@@ -1,17 +1,10 @@
 package health
 
 import (
-	"net/http"
 	"strings"
 
-	"github.com/unrolled/render"
+	"github.com/gin-gonic/gin"
 )
-
-var renderer *render.Render
-
-func init() {
-	renderer = render.New()
-}
 
 // HealthcheckDetailModel is the API Model representation of a single HealthCheck value
 type healthcheckDetailModel struct {
@@ -27,7 +20,7 @@ type healthcheckModel struct {
 }
 
 // Get will perform the actual healthchecks and return the response
-func (h *Healthchecker) get(w http.ResponseWriter, r *http.Request) {
+func (h *Healthchecker) get(c *gin.Context) {
 	healthcheckResults := h.checkHealth()
 
 	response := healthcheckModel{
@@ -51,5 +44,5 @@ func (h *Healthchecker) get(w http.ResponseWriter, r *http.Request) {
 		statusCode = 500
 	}
 
-	renderer.JSON(w, statusCode, response)
+	c.JSON(statusCode, response)
 }

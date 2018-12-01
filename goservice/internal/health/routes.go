@@ -1,10 +1,8 @@
 package health
 
-import (
-	"github.com/go-chi/chi"
-)
+import "github.com/gin-gonic/gin"
 
 // DefineRoutes will add the routes for the HealthChecks endpoints
-func (h *Healthchecker) DefineRoutes(r chi.Router) {
-	r.Get("/health", h.get)
+func (h *Healthchecker) DefineRoutes(r *gin.RouterGroup) {
+	r.GET("/health", h.get)
 }
