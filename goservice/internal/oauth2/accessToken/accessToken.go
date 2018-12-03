@@ -20,6 +20,22 @@ type AccessToken struct {
 	scopes        []string   // The scopes that the Access Token is valid for
 }
 
+// NewAccessToken creates a new access token for the given user, coming from the given client
+func (a *Creator) NewAccessToken(user users.ID, client clients.ID) AccessToken {
+	now := a.clock.Now()
+	expires := now.Add(a.duration)
+	id := a.idGenerator()
+
+	return AccessToken{
+		accessTokenID: ID(id.String()),
+		userID:        user,
+		clientID:      client,
+		created:       now,
+		expires:       expires,
+		scopes:        []string{},
+	}
+}
+
 // ID gets the Access Token ID
 func (a *AccessToken) ID() ID {
 	return a.accessTokenID

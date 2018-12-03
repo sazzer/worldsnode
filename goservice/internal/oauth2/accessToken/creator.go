@@ -4,8 +4,6 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
-	"grahamcox.co.uk/worlds/service/internal/oauth2/clients"
-	"grahamcox.co.uk/worlds/service/internal/users"
 
 	"github.com/google/uuid"
 )
@@ -23,21 +21,5 @@ func NewCreator(clock clock.Clock, duration time.Duration) Creator {
 		clock:       clock,
 		duration:    duration,
 		idGenerator: uuid.New,
-	}
-}
-
-// NewAccessToken creates a new access token for the given user, coming from the given client
-func (a *Creator) NewAccessToken(user users.ID, client clients.ID) AccessToken {
-	now := a.clock.Now()
-	expires := now.Add(a.duration)
-	id := a.idGenerator()
-
-	return AccessToken{
-		accessTokenID: ID(id.String()),
-		userID:        user,
-		clientID:      client,
-		created:       now,
-		expires:       expires,
-		scopes:        []string{},
 	}
 }

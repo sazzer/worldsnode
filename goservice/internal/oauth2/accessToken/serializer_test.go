@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
-	"github.com/go-errors/errors"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -86,7 +85,7 @@ func TestDeserializeErrors(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.Nil(t, accessToken)
 
-		assert.True(t, errors.Is(err, InvalidAccessTokenError))
+		assert.Equal(t, ErrInvalidAccessToken, err)
 	}
 }
 
@@ -109,6 +108,6 @@ func TestDeserializeTimeErrors(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.Nil(t, accessToken)
 
-		assert.True(t, errors.Is(err, InvalidAccessTokenError))
+		assert.Equal(t, ErrInvalidAccessToken, err)
 	}
 }

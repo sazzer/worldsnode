@@ -1,12 +1,12 @@
 package accesstoken
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/benbjohnson/clock"
 
-	"github.com/go-errors/errors"
 	"grahamcox.co.uk/worlds/service/internal/oauth2/clients"
 	"grahamcox.co.uk/worlds/service/internal/users"
 
@@ -18,8 +18,8 @@ const (
 	audience = "worlds"
 )
 
-// InvalidAccessTokenError is used to indicate that an access token we are deserializing was invalid
-var InvalidAccessTokenError = errors.Errorf("Invalid Access Token")
+// ErrInvalidAccessToken is used to indicate that an access token we are deserializing was invalid
+var ErrInvalidAccessToken = errors.New("Invalid Access Token")
 
 // Serializer is a means to serialise and deserialise Access Tokens to strings
 type Serializer interface {
@@ -101,7 +101,7 @@ func (s *serializerImpl) Deserialize(token string) (*AccessToken, error) {
 			WithField("accessToken", token).
 			WithError(err).
 			Warn("Error parsing access token")
-		return nil, errors.New(InvalidAccessTokenError)
+		return nil, ErrInvalidAccessToken
 	}
 
 	if err = s.signer.Verify(payload, sig); err != nil {
@@ -109,7 +109,7 @@ func (s *serializerImpl) Deserialize(token string) (*AccessToken, error) {
 			WithField("accessToken", token).
 			WithError(err).
 			Warn("Error verifying access token")
-		return nil, errors.New(InvalidAccessTokenError)
+		return nil, ErrInvalidAccessToken
 	}
 
 	var jot jwt.JWT
@@ -118,7 +118,7 @@ func (s *serializerImpl) Deserialize(token string) (*AccessToken, error) {
 			WithField("accessToken", token).
 			WithError(err).
 			Warn("Error unmarshalling access token")
-		return nil, errors.New(InvalidAccessTokenError)
+		return nil, ErrInvalidAccessToken
 	}
 
 	now := s.clock.Now()
@@ -132,7 +132,7 @@ func (s *serializerImpl) Deserialize(token string) (*AccessToken, error) {
 			WithField("jot", jot).
 			WithError(err).
 			Warn("Error validating access token")
-		return nil, errors.New(InvalidAccessTokenError)
+		return nil, ErrInvalidAccessToken
 	}
 
 	result := AccessToken{

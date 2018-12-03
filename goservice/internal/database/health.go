@@ -6,7 +6,7 @@ import (
 )
 
 // CheckHealth will check that we can connect to the database and perform a trivial query
-func (d *Database) CheckHealth(c chan<- health.Healthcheck) {
+func (d Database) CheckHealth(c chan<- health.Healthcheck) {
 	err := d.client.Ping()
 	if err == nil {
 		c <- health.Healthcheck{

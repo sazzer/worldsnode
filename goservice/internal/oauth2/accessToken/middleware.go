@@ -10,8 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// AuthProblem is the Problem type for authentication issues
-type AuthProblem struct {
+// authProblem is the Problem type for authentication issues
+type authProblem struct {
 	problem.Problem
 	Token string `json:"token"`
 }
@@ -51,7 +51,7 @@ func accessTokenMiddleware(serializer Serializer, c *gin.Context) {
 			WithError(err).
 			WithField("authorization", authorizationHeader).
 			Warn("Failed to parse access token")
-		problem := AuthProblem{
+		problem := authProblem{
 			Problem: problem.Problem{
 				Type:   "tag:grahamcox.co.uk,2018,worlds/problems/invalid_access_token",
 				Title:  "The provided Access Token was invalid",
